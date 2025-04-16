@@ -8,17 +8,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,8 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import top.fuadreza.exchangerate.R
 
 @Composable
 fun RateExchangeField() {
@@ -122,7 +125,7 @@ fun RateExchangeField() {
         Row(
           verticalAlignment = Alignment.CenterVertically
         ) {
-          RateFromTextField()
+          RateToTextField()
           Box(
             modifier = Modifier
               .width(
@@ -182,17 +185,16 @@ fun RateExchangeField() {
       Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+          .fillMaxWidth()
+          .fillMaxHeight()
       ) {
         Icon(
-          Icons.Rounded.KeyboardArrowUp,
-          contentDescription = "Switch",
-          tint = Color.White
-        )
-        Icon(
-          Icons.Rounded.KeyboardArrowDown,
-          contentDescription = "Switch",
-          tint = Color.White
+          painter = painterResource(id = R.drawable.switch_vertical),
+          contentDescription = stringResource(R.string.content_description_switch),
+          modifier = Modifier
+            .size(24.dp),
+          tint = Color.White,
         )
       }
     }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import top.fuadreza.exchangerate.ui.screens.home_screen.composables.CustomKeyboard
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.HomeHeader
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.RateExchangeChip
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.RateExchangeField
@@ -33,5 +34,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
       modifier = Modifier.height(height = Dp(value = 16f))
     )
     RateExchangeField()
+    Spacer(
+      modifier = Modifier.weight(1f)
+    )
+    CustomKeyboard()
   }
 }
