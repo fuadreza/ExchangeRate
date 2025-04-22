@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CustomKeyboardKey(text: String) {
+fun CustomKeyboardKey(text: String, onClick: (value: String) -> Unit) {
   Box(
     modifier = Modifier
       .clip(
@@ -27,7 +27,7 @@ fun CustomKeyboardKey(text: String) {
       )
       .fillMaxWidth()
       .clickable {
-
+        onClick(text)
       },
     contentAlignment = Alignment.Center
   ) {

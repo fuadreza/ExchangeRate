@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun CustomKeyboard() {
+fun CustomKeyboard(onClick: (String) -> Unit) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
@@ -37,49 +37,28 @@ fun CustomKeyboard() {
         modifier = Modifier
           .weight(1f)
       ) {
-        CustomKeyboardKey("1")
+        CustomKeyboardKey(
+          "1",
+          onClick = onClick
+        )
       }
       Box(
         modifier = Modifier
           .weight(1f)
       ) {
-        CustomKeyboardKey("2")
+        CustomKeyboardKey(
+          "2",
+          onClick = onClick
+        )
       }
       Box(
         modifier = Modifier
           .weight(1f)
       ) {
-        CustomKeyboardKey("3")
-      }
-    }
-    Spacer(
-      modifier = Modifier.height(height = Dp(value = 8f))
-    )
-    Row(
-      horizontalArrangement = Arrangement.spacedBy(8.dp),
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(
-          horizontal = 16.dp
-        ),
-    ) {
-      Box(
-        modifier = Modifier
-          .weight(1f)
-      ) {
-        CustomKeyboardKey("4")
-      }
-      Box(
-        modifier = Modifier
-          .weight(1f)
-      ) {
-        CustomKeyboardKey("5")
-      }
-      Box(
-        modifier = Modifier
-          .weight(1f)
-      ) {
-        CustomKeyboardKey("6")
+        CustomKeyboardKey(
+          "3",
+          onClick = onClick
+        )
       }
     }
     Spacer(
@@ -97,19 +76,67 @@ fun CustomKeyboard() {
         modifier = Modifier
           .weight(1f)
       ) {
-        CustomKeyboardKey("7")
+        CustomKeyboardKey(
+          "4",
+          onClick = onClick
+        )
       }
       Box(
         modifier = Modifier
           .weight(1f)
       ) {
-        CustomKeyboardKey("8")
+        CustomKeyboardKey(
+          "5",
+          onClick = onClick
+        )
       }
       Box(
         modifier = Modifier
           .weight(1f)
       ) {
-        CustomKeyboardKey("9")
+        CustomKeyboardKey(
+          "6",
+          onClick = onClick
+        )
+      }
+    }
+    Spacer(
+      modifier = Modifier.height(height = Dp(value = 8f))
+    )
+    Row(
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+          horizontal = 16.dp
+        ),
+    ) {
+      Box(
+        modifier = Modifier
+          .weight(1f)
+      ) {
+        CustomKeyboardKey(
+          "7",
+          onClick = onClick
+        )
+      }
+      Box(
+        modifier = Modifier
+          .weight(1f)
+      ) {
+        CustomKeyboardKey(
+          "8",
+          onClick = onClick
+        )
+      }
+      Box(
+        modifier = Modifier
+          .weight(1f)
+      ) {
+        CustomKeyboardKey(
+          "9",
+          onClick = onClick
+        )
       }
     }
   }

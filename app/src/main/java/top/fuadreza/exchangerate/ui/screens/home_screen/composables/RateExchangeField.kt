@@ -33,7 +33,11 @@ import androidx.compose.ui.unit.sp
 import top.fuadreza.exchangerate.R
 
 @Composable
-fun RateExchangeField() {
+fun RateExchangeField(
+  stateRateFromTextField: String,
+  stateRateToTextField: String,
+  onFocus: (String?) -> Unit
+) {
   Box(
     contentAlignment = Alignment.Center,
   ) {
@@ -60,7 +64,10 @@ fun RateExchangeField() {
         Row(
           verticalAlignment = Alignment.CenterVertically
         ) {
-          RateFromTextField()
+          RateFromTextField(
+            state = stateRateFromTextField,
+            onFocus
+          )
           Box(
             modifier = Modifier
               .width(
@@ -125,7 +132,10 @@ fun RateExchangeField() {
         Row(
           verticalAlignment = Alignment.CenterVertically
         ) {
-          RateToTextField()
+          RateToTextField(
+            state = stateRateToTextField,
+            onFocus
+          )
           Box(
             modifier = Modifier
               .width(

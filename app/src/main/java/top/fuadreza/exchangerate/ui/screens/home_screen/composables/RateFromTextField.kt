@@ -1,35 +1,31 @@
 package top.fuadreza.exchangerate.ui.screens.home_screen.composables
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.InterceptPlatformTextInput
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalTextInputService
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextInputService
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import top.fuadreza.exchangerate.ui.composables.DisableSoftKeyboard
 
 @Composable
-fun RateFromTextField() {
-  var text by remember { mutableStateOf("") }
+fun RateFromTextField(state: String, onFocus: (String?) -> Unit) {
   DisableSoftKeyboard {
     TextField(
-      value = text,
+      value = TextFieldValue(
+        text = state,
+        selection = TextRange(
+          state.length
+        )
+      ),
       placeholder = {
         Text(
           text = "0.00",
@@ -44,7 +40,14 @@ fun RateFromTextField() {
       modifier = Modifier
         .background(
           color = Color.Transparent
-        ),
+        )
+        .onFocusEvent {
+          if (it.isFocused) {
+            onFocus("1")
+          } else {
+            onFocus(null)
+          }
+        },
       colors = TextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
@@ -58,8 +61,8 @@ fun RateFromTextField() {
         unfocusedTextColor = Color.Black,
         disabledTextColor = Color.Black,
       ),
-      onValueChange = { value ->
-        text = value
+      onValueChange = { _ ->
+//        text = value
       }
     )
   }
