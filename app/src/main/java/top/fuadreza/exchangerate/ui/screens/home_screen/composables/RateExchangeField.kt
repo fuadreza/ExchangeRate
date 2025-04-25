@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import top.fuadreza.exchangerate.R
 
 @Composable
@@ -64,14 +65,18 @@ fun RateExchangeField(
         Row(
           verticalAlignment = Alignment.CenterVertically
         ) {
-          RateFromTextField(
-            state = stateRateFromTextField,
-            onFocus
-          )
+          Box(
+            modifier = Modifier.weight(1f)
+          ) {
+            RateFromTextField(
+              state = stateRateFromTextField,
+              onFocus
+            )
+          }
           Box(
             modifier = Modifier
               .width(
-                80.dp
+                100.dp
               )
               .border(
                 width = 0.4.dp,
@@ -93,6 +98,15 @@ fun RateExchangeField(
               .wrapContentHeight()
           ) {
             Row {
+              AsyncImage(
+                model = "https://currencyfreaks.com/photos/flags/usd.webp",
+                contentDescription = null,
+              )
+              Spacer(
+                modifier = Modifier.width(
+                  2.dp
+                )
+              )
               Text(
                 text = "USD",
                 fontSize = 14.sp,
@@ -132,14 +146,18 @@ fun RateExchangeField(
         Row(
           verticalAlignment = Alignment.CenterVertically
         ) {
-          RateToTextField(
-            state = stateRateToTextField,
-            onFocus = {}
-          )
+          Box(
+            modifier = Modifier.weight(1f)
+          ) {
+            RateToTextField(
+              state = stateRateToTextField,
+              onFocus = {}
+            )
+          }
           Box(
             modifier = Modifier
               .width(
-                80.dp
+                100.dp
               )
               .border(
                 width = 0.4.dp,
@@ -161,6 +179,15 @@ fun RateExchangeField(
               .wrapContentHeight()
           ) {
             Row {
+              AsyncImage(
+                model = "https://currencyfreaks.com/photos/flags/idr.webp",
+                contentDescription = null,
+              )
+              Spacer(
+                modifier = Modifier.width(
+                  2.dp
+                )
+              )
               Text(
                 text = "IDR",
                 fontSize = 14.sp,
