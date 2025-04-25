@@ -37,7 +37,10 @@ import top.fuadreza.exchangerate.R
 fun RateExchangeField(
   stateRateFromTextField: String,
   stateRateToTextField: String,
-  onFocus: (String?) -> Unit
+  stateCurrencyFrom: String,
+  stateCurrencyTo: String,
+  onFocus: (String?) -> Unit,
+  onSwap: () -> Unit
 ) {
   Box(
     contentAlignment = Alignment.Center,
@@ -99,7 +102,7 @@ fun RateExchangeField(
           ) {
             Row {
               AsyncImage(
-                model = "https://currencyfreaks.com/photos/flags/usd.webp",
+                model = "https://currencyfreaks.com/photos/flags/${stateCurrencyFrom.lowercase()}.webp",
                 contentDescription = null,
               )
               Spacer(
@@ -108,7 +111,7 @@ fun RateExchangeField(
                 )
               )
               Text(
-                text = "USD",
+                text = stateCurrencyFrom,
                 fontSize = 14.sp,
                 color = Color.Black,
                 modifier = Modifier.weight(
@@ -180,7 +183,7 @@ fun RateExchangeField(
           ) {
             Row {
               AsyncImage(
-                model = "https://currencyfreaks.com/photos/flags/idr.webp",
+                model = "https://currencyfreaks.com/photos/flags/${stateCurrencyTo.lowercase()}.webp",
                 contentDescription = null,
               )
               Spacer(
@@ -189,7 +192,7 @@ fun RateExchangeField(
                 )
               )
               Text(
-                text = "IDR",
+                text = stateCurrencyTo,
                 fontSize = 14.sp,
                 color = Color.Black,
                 modifier = Modifier.weight(
@@ -216,7 +219,7 @@ fun RateExchangeField(
         .width(50.dp)
         .height(50.dp)
         .clickable {
-
+          onSwap()
         }
     ) {
       Column(
