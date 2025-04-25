@@ -18,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
+import top.fuadreza.exchangerate.core.helpers.ThousandSeparatorTransformation
 import top.fuadreza.exchangerate.ui.composables.DisableSoftKeyboard
 
 @Composable
@@ -38,6 +39,7 @@ fun RateFromTextField(state: String, onFocus: (String?) -> Unit) {
           color = Color.Black.copy(alpha = 0.7f)
         )
       },
+      visualTransformation = ThousandSeparatorTransformation(),
       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
       textStyle = TextStyle(
         fontSize = 28.sp
