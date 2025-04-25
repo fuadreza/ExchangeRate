@@ -134,7 +134,7 @@ fun RateExchangeField(
         ) {
           RateToTextField(
             state = stateRateToTextField,
-            onFocus
+            onFocus = {}
           )
           Box(
             modifier = Modifier

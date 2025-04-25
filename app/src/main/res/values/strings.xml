@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Exchange Rate</string>
     <string name="content_description_switch">Switch</string>
+    <string name="content_description_backspace">Backspace</string>
 </resources>

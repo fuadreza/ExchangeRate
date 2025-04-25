@@ -6,7 +6,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
@@ -18,6 +22,7 @@ import top.fuadreza.exchangerate.ui.composables.DisableSoftKeyboard
 
 @Composable
 fun RateFromTextField(state: String, onFocus: (String?) -> Unit) {
+  val focusRequester = remember { FocusRequester() }
   DisableSoftKeyboard {
     TextField(
       value = TextFieldValue(
@@ -40,6 +45,9 @@ fun RateFromTextField(state: String, onFocus: (String?) -> Unit) {
       modifier = Modifier
         .background(
           color = Color.Transparent
+        )
+        .focusRequester(
+          focusRequester
         )
         .onFocusEvent {
           if (it.isFocused) {
@@ -65,5 +73,9 @@ fun RateFromTextField(state: String, onFocus: (String?) -> Unit) {
 //        text = value
       }
     )
+  }
+
+  LaunchedEffect(Unit) {
+    focusRequester.requestFocus()
   }
 }

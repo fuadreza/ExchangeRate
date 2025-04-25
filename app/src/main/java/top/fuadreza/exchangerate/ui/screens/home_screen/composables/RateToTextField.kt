@@ -20,6 +20,7 @@ import top.fuadreza.exchangerate.ui.composables.DisableSoftKeyboard
 fun RateToTextField(state: String, onFocus: (String?) -> Unit) {
   DisableSoftKeyboard {
     TextField(
+      enabled = false,
       value = TextFieldValue(
         text = state,
         selection = TextRange(
@@ -33,7 +34,6 @@ fun RateToTextField(state: String, onFocus: (String?) -> Unit) {
           color = Color.Black.copy(alpha = 0.7f)
         )
       },
-      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
       textStyle = TextStyle(
         fontSize = 28.sp
       ),

@@ -61,7 +61,34 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun ExchangeRatePreview() {
+  val largeRadialGradient = object : ShaderBrush() {
+    override fun createShader(size: Size): Shader {
+      val biggerDimension = maxOf(size.height, size.width)
+      return RadialGradientShader(
+        colors = listOf(Color(0xFFD3D7C9), Color(0xFFE3E6FF)),
+        center = Offset(x = 1f, y = size.width / 2f),
+        radius = biggerDimension / 2f,
+        colorStops = listOf(0f, 0.95f)
+      )
+    }
+  }
+
   ExchangeRateTheme {
-    HomeScreen()
+    Scaffold(
+      modifier = Modifier
+        .fillMaxSize()
+    ) { innerPadding ->
+      Box(
+        modifier = Modifier
+          .fillMaxSize()
+          .background(
+            largeRadialGradient
+          )
+      ) {
+        HomeScreen(
+          modifier = Modifier.padding(innerPadding)
+        )
+      }
+    }
   }
 }

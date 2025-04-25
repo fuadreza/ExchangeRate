@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import top.fuadreza.exchangerate.core.constants.CustomKeyboardAction
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.CustomKeyboard
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.HomeHeader
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.RateExchangeChip
@@ -21,9 +22,10 @@ import top.fuadreza.exchangerate.ui.screens.home_screen.composables.RateExchange
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-  var stateRateFromTextField by remember { mutableStateOf<String>("") }
-  var stateRateToTextField by remember { mutableStateOf<String>("") }
-  var focusedTextField by remember { mutableStateOf<String?>(null) }
+  var stateRateFromTextField by remember { mutableStateOf("") }
+  var stateRateToTextField by remember { mutableStateOf("") }
+  var focusedTextField by remember { mutableStateOf<String?>("1") }
+
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -52,10 +54,14 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     )
     CustomKeyboard(
       onClick = { value ->
-        if (focusedTextField == "1") {
-          stateRateFromTextField += value
+        if (value == CustomKeyboardAction.BACKSPACE) {
+          stateRateFromTextField = stateRateFromTextField.dropLast(1)
         } else {
-          stateRateToTextField += value
+          if (focusedTextField == "1") {
+            stateRateFromTextField += value
+          } else if (focusedTextField == "2") {
+            stateRateToTextField += value
+          }
         }
       }
     )
