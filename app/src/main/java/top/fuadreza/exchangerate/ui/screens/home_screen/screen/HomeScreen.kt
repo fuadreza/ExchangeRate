@@ -26,6 +26,16 @@ fun HomeScreen(modifier: Modifier = Modifier) {
   var stateRateToTextField by remember { mutableStateOf("") }
   var focusedTextField by remember { mutableStateOf<String?>("1") }
 
+  val usdToIdrRates: Int = 16837
+
+  fun calculateRates() {
+    stateRateToTextField = if (stateRateFromTextField.isNotBlank()) {
+      (stateRateFromTextField.toInt() * usdToIdrRates).toString()
+    } else {
+      ""
+    }
+  }
+
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -63,6 +73,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             stateRateToTextField += value
           }
         }
+
+        // Calculate last
+        calculateRates()
       }
     )
   }

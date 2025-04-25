@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
+import top.fuadreza.exchangerate.core.helpers.ThousandSeparatorTransformation
 import top.fuadreza.exchangerate.ui.composables.DisableSoftKeyboard
 
 @Composable
@@ -37,6 +38,7 @@ fun RateToTextField(state: String, onFocus: (String?) -> Unit) {
       textStyle = TextStyle(
         fontSize = 28.sp
       ),
+      visualTransformation = ThousandSeparatorTransformation(),
       modifier = Modifier
         .background(
           color = Color.Transparent
