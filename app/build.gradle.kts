@@ -2,6 +2,9 @@ plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.compose)
+  kotlin("plugin.serialization")
+  id("com.google.devtools.ksp")
+  id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -57,4 +60,18 @@ dependencies {
   // Coil
   implementation(libs.coil.compose)
   implementation(libs.coil.network.okhttp)
+
+  // Serialization
+  implementation(libs.kotlinx.serialization.json)
+
+  // Room
+  implementation(libs.androidx.room.runtime)
+  ksp(libs.androidx.room.compiler)
+
+  // optional - Kotlin Extensions and Coroutines support for Room
+  implementation(libs.androidx.room.ktx)
+
+  // Hilt
+  implementation(libs.hilt.android)
+  ksp(libs.hilt.compiler)
 }
