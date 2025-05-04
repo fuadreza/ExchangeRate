@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import top.fuadreza.exchangerate.core.constants.CustomKeyboardAction
 import top.fuadreza.exchangerate.core.extensions.round
 import top.fuadreza.exchangerate.core.helpers.ExchangeRates.rates
@@ -21,14 +23,22 @@ import top.fuadreza.exchangerate.ui.screens.home_screen.composables.CustomKeyboa
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.HomeHeader
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.RateExchangeChip
 import top.fuadreza.exchangerate.ui.screens.home_screen.composables.RateExchangeField
+import top.fuadreza.exchangerate.ui.screens.home_screen.viewmodel.CurrencyViewModel
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+  modifier: Modifier = Modifier,
+  viewModel: CurrencyViewModel = hiltViewModel()
+) {
   var stateRateFromTextField by remember { mutableStateOf("") }
   var stateRateToTextField by remember { mutableStateOf("") }
   var stateCurrencyFrom by remember { mutableStateOf("USD") }
   var stateCurrencyTo by remember { mutableStateOf("IDR") }
   var focusedTextField by remember { mutableStateOf<String?>("1") }
+
+  LaunchedEffect(Unit) {
+    viewModel.fetchRates()
+  }
 
   fun calculateRates() {
     if (stateRateFromTextField.isNotBlank()) {

@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
@@ -6,6 +8,9 @@ plugins {
   id("com.google.devtools.ksp")
   id("com.google.dagger.hilt.android")
 }
+
+// Get local.properties
+val currencyFreaksApiKey: String = gradleLocalProperties(rootDir, providers).getProperty("CURRENCY_FREAKS_API_KEY")
 
 android {
   namespace = "top.fuadreza.exchangerate"
@@ -19,12 +24,17 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    buildConfigField("String", "API_KEY", "\"$currencyFreaksApiKey\"")
   }
 
   buildTypes {
+    getByName("debug") {
+      buildConfigField("String", "API_KEY", currencyFreaksApiKey)
+    }
     release {
       isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+      buildConfigField("String", "API_KEY", "\"$currencyFreaksApiKey\"")
     }
   }
   compileOptions {
@@ -36,6 +46,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
 }
 
@@ -74,4 +85,13 @@ dependencies {
   // Hilt
   implementation(libs.hilt.android)
   ksp(libs.hilt.compiler)
+  implementation(libs.androidx.hilt.navigation.compose)
+
+  // Retrofit
+  implementation(libs.retrofit)
+  implementation(libs.converter.gson)
+  implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+  // Okhttp
+  implementation(libs.logging.interceptor)
 }

@@ -7,9 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
 import top.fuadreza.exchangerate.data.dao.ExchangeRateDao
 import top.fuadreza.exchangerate.data.database.AppDatabase
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
