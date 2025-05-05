@@ -1,4 +1,4 @@
-package top.fuadreza.exchangerate
+package top.fuadreza.tukaruang
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
   fun useAppContext() {
     // Context of the app under test.
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    assertEquals("top.fuadreza.exchangerate", appContext.packageName)
+    assertEquals("top.fuadreza.tukaruang", appContext.packageName)
   }
 }

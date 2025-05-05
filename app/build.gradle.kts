@@ -13,11 +13,11 @@ plugins {
 val currencyFreaksApiKey: String = gradleLocalProperties(rootDir, providers).getProperty("CURRENCY_FREAKS_API_KEY")
 
 android {
-  namespace = "top.fuadreza.exchangerate"
+  namespace = "top.fuadreza.tukaruang"
   compileSdk = 35
 
   defaultConfig {
-    applicationId = "top.fuadreza.exchangerate"
+    applicationId = "top.fuadreza.tukaruang"
     minSdk = 24
     targetSdk = 35
     versionCode = 1

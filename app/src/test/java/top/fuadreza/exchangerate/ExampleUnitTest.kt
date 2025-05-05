@@ -1,4 +1,4 @@
-package top.fuadreza.exchangerate
+package top.fuadreza.tukaruang
 
 import org.junit.Test
 
