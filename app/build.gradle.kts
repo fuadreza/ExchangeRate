@@ -33,8 +33,9 @@ android {
     }
     release {
       isMinifyEnabled = false
+      isDebuggable = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-      buildConfigField("String", "API_KEY", "\"$currencyFreaksApiKey\"")
+      buildConfigField("String", "API_KEY", currencyFreaksApiKey)
     }
   }
   compileOptions {

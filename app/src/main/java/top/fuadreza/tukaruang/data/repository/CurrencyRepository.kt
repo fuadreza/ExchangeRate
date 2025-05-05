@@ -15,7 +15,7 @@ class CurrencyRepository @Inject constructor(
     dao.insertExchangeRateWithCurrencies(exchangeEntity, currencyEntities)
   }
 
-  suspend fun fetchRatesWithBase(base: String) {
+  suspend fun fetchAndSaveRatesWithBase(base: String) {
     val response = api.getLatestRatesWithBase(base = base)
     val (exchangeEntity, currencyEntities) = response.toEntities()
     dao.insertExchangeRateWithCurrencies(exchangeEntity, currencyEntities)

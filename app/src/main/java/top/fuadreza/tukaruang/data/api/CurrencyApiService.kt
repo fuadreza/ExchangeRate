@@ -8,12 +8,12 @@ import top.fuadreza.tukaruang.data.model.ExchangeRateResponse
 interface CurrencyApiService {
   @GET("/v2.0/rates/latest")
   suspend fun getLatestRates(
-    @Query("apikey") apiKey: String = _root_ide_package_.top.fuadreza.tukaruang.BuildConfig.API_KEY
+    @Query("apikey") apiKey: String = BuildConfig.API_KEY
   ): ExchangeRateResponse
 
   @GET("/v2.0/rates/latest")
   suspend fun getLatestRatesWithBase(
-    @Query("apikey") apiKey: String = _root_ide_package_.top.fuadreza.tukaruang.BuildConfig.API_KEY,
+    @Query("apikey") apiKey: String = BuildConfig.API_KEY,
     @Query("base") base: String
   ): ExchangeRateResponse
 }
