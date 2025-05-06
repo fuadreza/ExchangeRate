@@ -27,4 +27,7 @@ interface ExchangeRateDao {
 
   @Query("SELECT * FROM currency_rates WHERE exchangeRateId = :rateId")
   suspend fun getCurrencyRatesFor(rateId: Long): List<CurrencyRateEntity>
+
+  @Query("SELECT * FROM exchange_rates WHERE base = :base LIMIT 1")
+  suspend fun getExchangeRateByBase(base: String): ExchangeRateEntity?
 }

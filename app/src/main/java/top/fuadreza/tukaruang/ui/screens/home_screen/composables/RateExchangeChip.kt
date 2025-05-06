@@ -7,14 +7,24 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import top.fuadreza.tukaruang.ui.screens.home_screen.viewmodel.CurrencyViewModel
 
 @Composable
-fun RateExchangeChip() {
+fun RateExchangeChip(
+  viewModel: CurrencyViewModel = hiltViewModel(),
+) {
+  val exchangeRateState by viewModel.exchangeRateState.collectAsStateWithLifecycle()
+  val currencyRateTo by viewModel.currencyRateTo.collectAsStateWithLifecycle()
+  val rateToState by viewModel.rateTo.collectAsStateWithLifecycle()
+
   Box(
     modifier = Modifier
       .clip(
@@ -30,7 +40,7 @@ fun RateExchangeChip() {
       .wrapContentSize()
   ) {
     Text(
-      text = "1 USD =  16.750 IDR",
+      text = "1 ${exchangeRateState.base} = $currencyRateTo $rateToState",
       fontSize = 14.sp,
       color = Color.White
     )

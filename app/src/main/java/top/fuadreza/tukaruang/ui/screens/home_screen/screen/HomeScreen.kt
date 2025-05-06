@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fuadreza.tukaruang.core.constants.CustomKeyboardAction
 import top.fuadreza.tukaruang.core.extensions.round
-import top.fuadreza.tukaruang.core.helpers.ExchangeRates.rates
 import top.fuadreza.tukaruang.ui.screens.home_screen.composables.CustomKeyboard
 import top.fuadreza.tukaruang.ui.screens.home_screen.composables.HomeHeader
 import top.fuadreza.tukaruang.ui.screens.home_screen.composables.RateExchangeChip
@@ -32,9 +32,12 @@ fun HomeScreen(
 ) {
   var stateRateFromTextField by remember { mutableStateOf("") }
   var stateRateToTextField by remember { mutableStateOf("") }
-  var stateCurrencyFrom by remember { mutableStateOf("USD") }
-  var stateCurrencyTo by remember { mutableStateOf("IDR") }
+  var stateCurrencyFrom by remember { mutableStateOf("USD") } // TODO(fuad): dihapus diganti dari vm
+  var stateCurrencyTo by remember { mutableStateOf("IDR") } // TODO(fuad): dihapus diganti dari vm
   var focusedTextField by remember { mutableStateOf<String?>("1") }
+
+  // View Model
+  val rateToState by viewModel.rateTo.collectAsStateWithLifecycle()
 
   LaunchedEffect(Unit) {
     viewModel.fetchRates()
@@ -42,13 +45,8 @@ fun HomeScreen(
 
   fun calculateRates() {
     if (stateRateFromTextField.isNotBlank()) {
-      if (rates.containsKey(stateCurrencyFrom) && rates.containsKey(stateCurrencyTo)) {
-        val rateFrom: Double = rates[stateCurrencyFrom] ?: 0.0
-        val rateTo: Double = rates[stateCurrencyTo] ?: 0.0
-
-        val amountInBase = stateRateFromTextField.toInt() / rateFrom // Convert to base (USD)
-        stateRateToTextField = (amountInBase * rateTo).round(2).toString()
-      }
+      val amountInBase = stateRateFromTextField.toInt()
+      stateRateToTextField = (amountInBase * rateToState).round(2).toString()
     } else {
       stateRateToTextField = ""
     }
@@ -62,15 +60,20 @@ fun HomeScreen(
       ),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    HomeHeader()
+    HomeHeader(
+      viewModel
+    )
     Spacer(
       modifier = Modifier.height(height = Dp(value = 16f))
     )
-    RateExchangeChip()
+    RateExchangeChip(
+      viewModel,
+    )
     Spacer(
       modifier = Modifier.height(height = Dp(value = 16f))
     )
     RateExchangeField(
+      viewModel,
       stateRateFromTextField,
       stateRateToTextField,
       stateCurrencyFrom,
@@ -91,6 +94,13 @@ fun HomeScreen(
           // Calculate last
           calculateRates()
         }
+      },
+      onChangeCurrencyTo = { value ->
+        stateCurrencyTo = value
+        viewModel.changeRateTo(value)
+      },
+      onChangeRateTo = { value ->
+        stateRateToTextField = value.toString()
       }
     )
     Spacer(

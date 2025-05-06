@@ -19,9 +19,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,18 +36,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import top.fuadreza.tukaruang.R
+import top.fuadreza.tukaruang.ui.screens.home_screen.viewmodel.CurrencyViewModel
 
 @Composable
 fun RateExchangeField(
+  viewModel: CurrencyViewModel = hiltViewModel(),
   stateRateFromTextField: String,
   stateRateToTextField: String,
   stateCurrencyFrom: String,
   stateCurrencyTo: String,
   onFocus: (String?) -> Unit,
-  onSwap: () -> Unit
+  onSwap: () -> Unit,
+  onChangeCurrencyTo: (String) -> Unit,
+  onChangeRateTo: (Double) -> Unit
 ) {
+  var expanded by remember { mutableStateOf(false) }
+
+  val currencyRatesState by viewModel.currencyRates.collectAsStateWithLifecycle()
+
   Box(
     contentAlignment = Alignment.Center,
   ) {
@@ -173,7 +189,7 @@ fun RateExchangeField(
                 shape = RoundedCornerShape(14.dp)
               )
               .clickable {
-                // TODO: Handle click drop down currency
+                expanded = true
               }
               .padding(
                 horizontal = 10.dp,
@@ -203,6 +219,24 @@ fun RateExchangeField(
                 Icons.Rounded.ArrowDropDown,
                 contentDescription = "Drop Down",
               )
+            }
+            DropdownMenu(
+              expanded = expanded,
+              onDismissRequest = { expanded = false }
+            ) {
+              currencyRatesState.forEach{ currencyRates ->
+                DropdownMenuItem(
+                  text = {
+                    Text(
+                      currencyRates.currencyCode
+                    )
+                  },
+                  onClick = {
+                    onChangeCurrencyTo(currencyRates.currencyCode)
+                    expanded = false
+                  }
+                )
+              }
             }
           }
         }

@@ -16,7 +16,10 @@ import top.fuadreza.tukaruang.core.helpers.ThousandSeparatorTransformation
 import top.fuadreza.tukaruang.ui.composables.DisableSoftKeyboard
 
 @Composable
-fun RateToTextField(state: String, onFocus: (String?) -> Unit) {
+fun RateToTextField(
+  state: String,
+  onFocus: (String?) -> Unit
+) {
   DisableSoftKeyboard {
     TextField(
       enabled = false,

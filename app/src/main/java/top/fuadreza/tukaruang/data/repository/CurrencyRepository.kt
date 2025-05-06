@@ -22,4 +22,8 @@ class CurrencyRepository @Inject constructor(
   }
 
   suspend fun getLatestRatesFromDb() = dao.getLatestExchangeRate()
+
+  suspend fun getExchangeRateByBase(base: String) = dao.getExchangeRateByBase(base)
+
+  suspend fun getCurrencyRatesFor(rateId: Long) = dao.getCurrencyRatesFor(rateId)
 }
