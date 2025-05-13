@@ -28,6 +28,7 @@ interface ExchangeRateDao {
       rateId = insertExchangeRate(rate)
     }
     if (rateId != -1L) {
+      deleteAllCurrencyRates()
       val currencyRates = currencies.map { it.copy(exchangeRateId = rateId) }
       insertCurrencyRates(currencyRates)
     }
@@ -44,4 +45,7 @@ interface ExchangeRateDao {
 
   @Query("SELECT * FROM exchange_rates WHERE base = :base LIMIT 1")
   suspend fun getExchangeRateByBase(base: String): ExchangeRateEntity?
+
+  @Query("DELETE FROM currency_rates")
+  suspend fun deleteAllCurrencyRates()
 }

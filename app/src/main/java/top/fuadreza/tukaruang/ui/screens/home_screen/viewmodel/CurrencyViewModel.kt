@@ -1,6 +1,5 @@
 package top.fuadreza.tukaruang.ui.screens.home_screen.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,7 +60,6 @@ class CurrencyViewModel @Inject constructor(
         // Base Exchange Rate
         val exchangeRate: ExchangeRateEntity? = repository.getExchangeRateByBase("USD")
         if (exchangeRate != null) {
-          Log.d("RATES", "USD ${exchangeRate.date}")
           _exchangeRateState.update { _ ->
             exchangeRate
           }
