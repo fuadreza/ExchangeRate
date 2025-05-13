@@ -1,5 +1,6 @@
 package top.fuadreza.tukaruang.ui.screens.home_screen.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,12 +37,31 @@ class CurrencyViewModel @Inject constructor(
   private val _rateTo = MutableStateFlow(0.0)
   val rateTo: StateFlow<Double> = _rateTo.asStateFlow()
 
+  private val _refreshingRates = MutableStateFlow(false)
+  val refreshingRates: StateFlow<Boolean> = _refreshingRates.asStateFlow()
+
+  /*
+   * Fetch rates online and update locally
+   */
+  fun fetchRatesToLatest() {
+    viewModelScope.launch(Dispatchers.IO) {
+      _refreshingRates.value = true
+      repository.fetchAndSaveLatestRates()
+      _refreshingRates.value = false
+      fetchRates()
+    }
+  }
+
+  /*
+   * Fetch to get all Rates
+   */
   fun fetchRates() {
     viewModelScope.launch(Dispatchers.IO) {
       try {
         // Base Exchange Rate
         val exchangeRate: ExchangeRateEntity? = repository.getExchangeRateByBase("USD")
         if (exchangeRate != null) {
+          Log.d("RATES", "USD ${exchangeRate.date}")
           _exchangeRateState.update { _ ->
             exchangeRate
           }

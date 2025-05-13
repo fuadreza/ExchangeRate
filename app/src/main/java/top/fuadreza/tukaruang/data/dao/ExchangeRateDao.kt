@@ -17,10 +17,24 @@ interface ExchangeRateDao {
     rate: ExchangeRateEntity,
     currencies: List<CurrencyRateEntity>
   ) {
-    val rateId = insertExchangeRate(rate)
-    val currencyRates = currencies.map { it.copy(exchangeRateId = rateId) }
-    insertCurrencyRates(currencyRates)
+    val exchangeRate = getExchangeRateByBase(base = rate.base)
+    var rateId: Long = -1L
+    if (exchangeRate != null) {
+      rateId = exchangeRate.id
+      updateExchangeRate(rate.copy(
+        id = exchangeRate.id
+      ))
+    } else {
+      rateId = insertExchangeRate(rate)
+    }
+    if (rateId != -1L) {
+      val currencyRates = currencies.map { it.copy(exchangeRateId = rateId) }
+      insertCurrencyRates(currencyRates)
+    }
   }
+
+  @Update
+  suspend fun updateExchangeRate(rate: ExchangeRateEntity)
 
   @Query("SELECT * FROM exchange_rates ORDER BY id DESC LIMIT 1")
   suspend fun getLatestExchangeRate(): ExchangeRateEntity?
