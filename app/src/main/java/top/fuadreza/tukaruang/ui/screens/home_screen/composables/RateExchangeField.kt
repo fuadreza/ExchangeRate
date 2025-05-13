@@ -49,10 +49,11 @@ fun RateExchangeField(
   stateRateToTextField: String,
   onFocus: (String?) -> Unit,
   onSwap: () -> Unit,
-  onChangeCurrencyTo: (String) -> Unit,
-  onChangeRateTo: (Double) -> Unit
+  onChangeCurrencyFrom: (String) -> Unit?,
+  onChangeCurrencyTo: (String) -> Unit
 ) {
-  var expanded by remember { mutableStateOf(false) }
+  var expandedRatesFrom by remember { mutableStateOf(false) }
+  var expandedRatesTo by remember { mutableStateOf(false) }
 
   val currencyRatesState by viewModel.currencyRates.collectAsStateWithLifecycle()
   val currencyRateFromState by viewModel.currencyRateFrom.collectAsStateWithLifecycle()
@@ -108,7 +109,7 @@ fun RateExchangeField(
                 shape = RoundedCornerShape(14.dp)
               )
               .clickable {
-                // TODO: Handle click drop down currency
+                expandedRatesFrom = true
               }
               .padding(
                 horizontal = 10.dp,
@@ -138,6 +139,24 @@ fun RateExchangeField(
                 Icons.Rounded.ArrowDropDown,
                 contentDescription = "Drop Down",
               )
+            }
+            DropdownMenu(
+              expanded = expandedRatesFrom,
+              onDismissRequest = { expandedRatesFrom = false }
+            ) {
+              currencyRatesState.forEach { currencyRates ->
+                DropdownMenuItem(
+                  text = {
+                    Text(
+                      currencyRates.currencyCode
+                    )
+                  },
+                  onClick = {
+                    onChangeCurrencyFrom(currencyRates.currencyCode)
+                    expandedRatesFrom = false
+                  }
+                )
+              }
             }
           }
         }
@@ -189,7 +208,7 @@ fun RateExchangeField(
                 shape = RoundedCornerShape(14.dp)
               )
               .clickable {
-                expanded = true
+                expandedRatesTo = true
               }
               .padding(
                 horizontal = 10.dp,
@@ -221,10 +240,10 @@ fun RateExchangeField(
               )
             }
             DropdownMenu(
-              expanded = expanded,
-              onDismissRequest = { expanded = false }
+              expanded = expandedRatesTo,
+              onDismissRequest = { expandedRatesTo = false }
             ) {
-              currencyRatesState.forEach{ currencyRates ->
+              currencyRatesState.forEach { currencyRates ->
                 DropdownMenuItem(
                   text = {
                     Text(
@@ -233,7 +252,7 @@ fun RateExchangeField(
                   },
                   onClick = {
                     onChangeCurrencyTo(currencyRates.currencyCode)
-                    expanded = false
+                    expandedRatesTo = false
                   }
                 )
               }

@@ -1,6 +1,5 @@
 package top.fuadreza.tukaruang.ui.screens.home_screen.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import top.fuadreza.tukaruang.core.extensions.round
 import top.fuadreza.tukaruang.data.entities.CurrencyRateEntity
 import top.fuadreza.tukaruang.data.entities.ExchangeRateEntity
 import top.fuadreza.tukaruang.data.repository.CurrencyRepository
@@ -42,6 +42,12 @@ class CurrencyViewModel @Inject constructor(
 
   private val _refreshingRates = MutableStateFlow(false)
   val refreshingRates: StateFlow<Boolean> = _refreshingRates.asStateFlow()
+
+  // Text Field
+  private val _stateRateFromTextField = MutableStateFlow("")
+  val stateRateFromTextField: StateFlow<String> = _stateRateFromTextField.asStateFlow()
+  private val _stateRateToTextField = MutableStateFlow("")
+  val stateRateToTextField: StateFlow<String> = _stateRateToTextField.asStateFlow()
 
   /*
    * Fetch rates online and update locally
@@ -79,6 +85,8 @@ class CurrencyViewModel @Inject constructor(
           // Filter Currency Rates with Country Based Currency Rates
           val filteredCurrency: List<CurrencyRateEntity> = currencyRates.filter {
             it.currencyCode in validCountryCurrencyCodes
+          }.sortedBy { a ->
+            a.currencyCode
           }
 
           _currencyRates.update { _ ->
@@ -101,6 +109,7 @@ class CurrencyViewModel @Inject constructor(
     _currencyRateFrom.update {
       base
     }
+    recalculateRates()
   }
 
   /**
@@ -109,36 +118,48 @@ class CurrencyViewModel @Inject constructor(
   fun changeRateTo(base: String) {
     // Update Rate To
     _currencyRateTo.value = base
+    recalculateRates()
+  }
 
+  private fun recalculateRates() {
     // Update Rates
-    val rate = _currencyRates.value.find {
-      it.currencyCode == base
+    val rateTo = _currencyRates.value.find {
+      it.currencyCode == _currencyRateTo.value
     }
-    if (rate != null) {
+    if (rateTo != null) {
       val rateFrom = _currencyRates.value.find {
         it.currencyCode == _currencyRateFrom.value
       }
       if (rateFrom != null) {
         _rateTo.update {
           // TODO(fuad): handle pecahan
-          (rate.rate / rateFrom.rate)
+          (rateTo.rate / rateFrom.rate)
         }
       } else {
         _rateTo.update {
-          rate.rate
+          rateTo.rate
         }
       }
     }
+
+    // Calculate and display to text
+    calculateExchangeRates()
   }
 
-  fun recalculateRates() {
-    // TODO(fuad): add recalculate
+  fun calculateExchangeRates() {
+    if (_stateRateFromTextField.value.isNotBlank()) {
+      val amountInBase = _stateRateFromTextField.value.toDouble()
+      _stateRateToTextField.value = (amountInBase * _rateTo.value).round(2).toString()
+    } else {
+      _stateRateToTextField.value = ""
+    }
   }
 
   /**
-   *  Swap Rate From and To
+   *  Swap Rate and Text From and To
    */
   fun swapRate() {
+    // Rate
     val tempFrom = _currencyRateFrom.value
     _currencyRateFrom.update {
       _currencyRateTo.value
@@ -146,6 +167,30 @@ class CurrencyViewModel @Inject constructor(
     _currencyRateTo.update {
       tempFrom
     }
+
+    // Text field
+    val tempFromText = _stateRateFromTextField.value
+    _stateRateFromTextField.update {
+      _stateRateToTextField.value
+    }
+    _stateRateToTextField.update {
+      tempFromText
+    }
+
     changeRateTo(tempFrom)
   }
+
+  //#region TEXT FIELD
+
+  fun addText(value: String) {
+    _stateRateFromTextField.value += value
+  }
+
+  fun deleteTextFrom() {
+    _stateRateFromTextField.update {
+      _stateRateFromTextField.value.dropLast(1)
+    }
+  }
+
+  //#endregion TEXT FIELD
 }

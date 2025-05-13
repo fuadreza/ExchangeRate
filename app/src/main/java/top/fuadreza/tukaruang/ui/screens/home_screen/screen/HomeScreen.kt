@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -18,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fuadreza.tukaruang.core.constants.CustomKeyboardAction
-import top.fuadreza.tukaruang.core.extensions.round
 import top.fuadreza.tukaruang.ui.screens.home_screen.composables.CustomKeyboard
 import top.fuadreza.tukaruang.ui.screens.home_screen.composables.HomeHeader
 import top.fuadreza.tukaruang.ui.screens.home_screen.composables.RateExchangeChip
@@ -30,24 +26,13 @@ fun HomeScreen(
   modifier: Modifier = Modifier,
   viewModel: CurrencyViewModel = hiltViewModel()
 ) {
-  var stateRateFromTextField by remember { mutableStateOf("") }
-  var stateRateToTextField by remember { mutableStateOf("") }
-  var focusedTextField by remember { mutableStateOf<String?>("1") }
 
   // View Model
-  val rateToState by viewModel.rateTo.collectAsStateWithLifecycle()
+  val stateRateFromTextField by viewModel.stateRateFromTextField.collectAsStateWithLifecycle()
+  val stateRateToTextField by viewModel.stateRateToTextField.collectAsStateWithLifecycle()
 
   LaunchedEffect(Unit) {
     viewModel.fetchRates()
-  }
-
-  fun calculateRates() {
-    if (stateRateFromTextField.isNotBlank()) {
-      val amountInBase = stateRateFromTextField.toInt()
-      stateRateToTextField = (amountInBase * rateToState).round(2).toString()
-    } else {
-      stateRateToTextField = ""
-    }
   }
 
   Column(
@@ -74,22 +59,18 @@ fun HomeScreen(
       viewModel,
       stateRateFromTextField,
       stateRateToTextField,
-      onFocus = { value ->
-        focusedTextField = value
+      onFocus = { _ ->
+//        focusedTextField = value
       },
       onSwap = {
-        if (stateRateFromTextField.isNotBlank() && stateRateToTextField.isNotBlank()) {
-          val tempRateFrom = stateRateFromTextField
-          stateRateFromTextField = (stateRateToTextField.toDouble().round(2).toInt()).toString()
-          stateRateToTextField = (tempRateFrom.toDouble().round(2).toInt()).toString()
-        }
-
         viewModel.swapRate()
+      },
+      onChangeCurrencyFrom = { value ->
+        viewModel.changeRateFrom(value)
       },
       onChangeCurrencyTo = { value ->
         viewModel.changeRateTo(value)
-      },
-      onChangeRateTo = { }
+      }
     )
     Spacer(
       modifier = Modifier.weight(1f)
@@ -97,17 +78,13 @@ fun HomeScreen(
     CustomKeyboard(
       onClick = { value ->
         if (value == CustomKeyboardAction.BACKSPACE) {
-          stateRateFromTextField = stateRateFromTextField.dropLast(1)
+          viewModel.deleteTextFrom()
         } else {
-          if (focusedTextField == "1") {
-            stateRateFromTextField += value
-          } else if (focusedTextField == "2") {
-            stateRateToTextField += value
-          }
+          viewModel.addText(value)
         }
 
         // Calculate last
-        calculateRates()
+        viewModel.calculateExchangeRates()
       }
     )
   }
