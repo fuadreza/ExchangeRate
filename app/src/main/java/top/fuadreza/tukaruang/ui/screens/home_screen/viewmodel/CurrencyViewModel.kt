@@ -68,10 +68,21 @@ class CurrencyViewModel @Inject constructor(
             exchangeRate
           }
 
-          // Update Currency Rates To
+          // Get Country Currency Rates
+          val validCountryCurrencyCodes = java.util.Currency.getAvailableCurrencies()
+            .map { it.currencyCode }
+            .toSet()
+
+          // Get Currency Rates from Database
           val currencyRates: List<CurrencyRateEntity> = repository.getCurrencyRatesFor(exchangeRate.id)
+
+          // Filter Currency Rates with Country Based Currency Rates
+          val filteredCurrency: List<CurrencyRateEntity> = currencyRates.filter {
+            it.currencyCode in validCountryCurrencyCodes
+          }
+
           _currencyRates.update { _ ->
-            currencyRates.toMutableList()
+            filteredCurrency.toMutableList()
           }
 
           // Update Rate To
@@ -118,6 +129,10 @@ class CurrencyViewModel @Inject constructor(
         }
       }
     }
+  }
+
+  fun recalculateRates() {
+    // TODO(fuad): add recalculate
   }
 
   /**
