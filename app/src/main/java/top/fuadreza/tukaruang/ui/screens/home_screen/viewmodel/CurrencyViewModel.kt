@@ -1,5 +1,6 @@
 package top.fuadreza.tukaruang.ui.screens.home_screen.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +30,9 @@ class CurrencyViewModel @Inject constructor(
 
   private val _currencyRates = MutableStateFlow<MutableList<CurrencyRateEntity>>(mutableListOf())
   val currencyRates: StateFlow<MutableList<CurrencyRateEntity>> = _currencyRates.asStateFlow()
+
+  private val _currencyRateFrom = MutableStateFlow("USD")
+  val currencyRateFrom: StateFlow<String> = _currencyRateFrom.asStateFlow()
 
   private val _currencyRateTo = MutableStateFlow("IDR")
   val currencyRateTo: StateFlow<String> = _currencyRateTo.asStateFlow()
@@ -80,16 +84,53 @@ class CurrencyViewModel @Inject constructor(
   }
 
   /**
+   *  Change Rate From
+   */
+  fun changeRateFrom(base: String) {
+    _currencyRateFrom.update {
+      base
+    }
+  }
+
+  /**
    *  Change Rate To
    */
   fun changeRateTo(base: String) {
+    // Update Rate To
+    _currencyRateTo.value = base
+
+    // Update Rates
     val rate = _currencyRates.value.find {
       it.currencyCode == base
     }
     if (rate != null) {
-      _rateTo.update {
-        rate.rate
+      val rateFrom = _currencyRates.value.find {
+        it.currencyCode == _currencyRateFrom.value
+      }
+      if (rateFrom != null) {
+        _rateTo.update {
+          // TODO(fuad): handle pecahan
+          (rate.rate / rateFrom.rate)
+        }
+      } else {
+        _rateTo.update {
+          rate.rate
+        }
       }
     }
+  }
+
+  /**
+   *  Swap Rate From and To
+   */
+  fun swapRate() {
+    val tempFrom = _currencyRateFrom.value
+    _currencyRateFrom.update {
+      _currencyRateTo.value
+    }
+    _currencyRateTo.update {
+      tempFrom
+    }
+    changeRateTo(tempFrom)
   }
 }

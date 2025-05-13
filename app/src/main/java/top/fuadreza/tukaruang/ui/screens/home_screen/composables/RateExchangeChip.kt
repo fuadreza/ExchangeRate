@@ -21,7 +21,7 @@ import top.fuadreza.tukaruang.ui.screens.home_screen.viewmodel.CurrencyViewModel
 fun RateExchangeChip(
   viewModel: CurrencyViewModel = hiltViewModel(),
 ) {
-  val exchangeRateState by viewModel.exchangeRateState.collectAsStateWithLifecycle()
+  val currencyRateFrom by viewModel.currencyRateFrom.collectAsStateWithLifecycle()
   val currencyRateTo by viewModel.currencyRateTo.collectAsStateWithLifecycle()
   val rateToState by viewModel.rateTo.collectAsStateWithLifecycle()
 
@@ -40,7 +40,7 @@ fun RateExchangeChip(
       .wrapContentSize()
   ) {
     Text(
-      text = "1 ${exchangeRateState.base} = $currencyRateTo $rateToState",
+      text = "1 $currencyRateFrom = $currencyRateTo $rateToState",
       fontSize = 14.sp,
       color = Color.White
     )

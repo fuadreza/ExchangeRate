@@ -47,8 +47,6 @@ fun RateExchangeField(
   viewModel: CurrencyViewModel = hiltViewModel(),
   stateRateFromTextField: String,
   stateRateToTextField: String,
-  stateCurrencyFrom: String,
-  stateCurrencyTo: String,
   onFocus: (String?) -> Unit,
   onSwap: () -> Unit,
   onChangeCurrencyTo: (String) -> Unit,
@@ -57,6 +55,8 @@ fun RateExchangeField(
   var expanded by remember { mutableStateOf(false) }
 
   val currencyRatesState by viewModel.currencyRates.collectAsStateWithLifecycle()
+  val currencyRateFromState by viewModel.currencyRateFrom.collectAsStateWithLifecycle()
+  val currencyRateToState by viewModel.currencyRateTo.collectAsStateWithLifecycle()
 
   Box(
     contentAlignment = Alignment.Center,
@@ -118,7 +118,7 @@ fun RateExchangeField(
           ) {
             Row {
               AsyncImage(
-                model = "https://currencyfreaks.com/photos/flags/${stateCurrencyFrom.lowercase()}.webp",
+                model = "https://currencyfreaks.com/photos/flags/${currencyRateFromState.lowercase()}.webp",
                 contentDescription = null,
               )
               Spacer(
@@ -127,7 +127,7 @@ fun RateExchangeField(
                 )
               )
               Text(
-                text = stateCurrencyFrom,
+                text = currencyRateFromState,
                 fontSize = 14.sp,
                 color = Color.Black,
                 modifier = Modifier.weight(
@@ -199,7 +199,7 @@ fun RateExchangeField(
           ) {
             Row {
               AsyncImage(
-                model = "https://currencyfreaks.com/photos/flags/${stateCurrencyTo.lowercase()}.webp",
+                model = "https://currencyfreaks.com/photos/flags/${currencyRateToState.lowercase()}.webp",
                 contentDescription = null,
               )
               Spacer(
@@ -208,7 +208,7 @@ fun RateExchangeField(
                 )
               )
               Text(
-                text = stateCurrencyTo,
+                text = currencyRateToState,
                 fontSize = 14.sp,
                 color = Color.Black,
                 modifier = Modifier.weight(

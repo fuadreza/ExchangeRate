@@ -32,8 +32,6 @@ fun HomeScreen(
 ) {
   var stateRateFromTextField by remember { mutableStateOf("") }
   var stateRateToTextField by remember { mutableStateOf("") }
-  var stateCurrencyFrom by remember { mutableStateOf("USD") } // TODO(fuad): dihapus diganti dari vm
-  var stateCurrencyTo by remember { mutableStateOf("IDR") } // TODO(fuad): dihapus diganti dari vm
   var focusedTextField by remember { mutableStateOf<String?>("1") }
 
   // View Model
@@ -76,32 +74,22 @@ fun HomeScreen(
       viewModel,
       stateRateFromTextField,
       stateRateToTextField,
-      stateCurrencyFrom,
-      stateCurrencyTo,
       onFocus = { value ->
         focusedTextField = value
       },
       onSwap = {
-        val tempCurrencyFrom = stateCurrencyFrom
-        stateCurrencyFrom = stateCurrencyTo
-        stateCurrencyTo = tempCurrencyFrom
-
         if (stateRateFromTextField.isNotBlank() && stateRateToTextField.isNotBlank()) {
           val tempRateFrom = stateRateFromTextField
           stateRateFromTextField = (stateRateToTextField.toDouble().round(2).toInt()).toString()
           stateRateToTextField = (tempRateFrom.toDouble().round(2).toInt()).toString()
-
-          // Calculate last
-          calculateRates()
         }
+
+        viewModel.swapRate()
       },
       onChangeCurrencyTo = { value ->
-        stateCurrencyTo = value
         viewModel.changeRateTo(value)
       },
-      onChangeRateTo = { value ->
-        stateRateToTextField = value.toString()
-      }
+      onChangeRateTo = { }
     )
     Spacer(
       modifier = Modifier.weight(1f)
