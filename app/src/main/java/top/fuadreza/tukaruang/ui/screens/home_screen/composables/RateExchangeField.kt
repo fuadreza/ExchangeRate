@@ -147,9 +147,20 @@ fun RateExchangeField(
               currencyRatesState.forEach { currencyRates ->
                 DropdownMenuItem(
                   text = {
-                    Text(
-                      currencyRates.currencyCode
-                    )
+                    Row {
+                      AsyncImage(
+                        model = "https://currencyfreaks.com/photos/flags/${currencyRates.currencyCode.lowercase()}.webp",
+                        contentDescription = null,
+                      )
+                      Spacer(
+                        modifier = Modifier.width(
+                          2.dp
+                        )
+                      )
+                      Text(
+                        currencyRates.currencyCode
+                      )
+                    }
                   },
                   onClick = {
                     onChangeCurrencyFrom(currencyRates.currencyCode)
@@ -246,9 +257,20 @@ fun RateExchangeField(
               currencyRatesState.forEach { currencyRates ->
                 DropdownMenuItem(
                   text = {
-                    Text(
-                      currencyRates.currencyCode
-                    )
+                    Row {
+                      AsyncImage(
+                        model = "https://currencyfreaks.com/photos/flags/${currencyRates.currencyCode.lowercase()}.webp",
+                        contentDescription = null,
+                      )
+                      Spacer(
+                        modifier = Modifier.width(
+                          2.dp
+                        )
+                      )
+                      Text(
+                        currencyRates.currencyCode
+                      )
+                    }
                   },
                   onClick = {
                     onChangeCurrencyTo(currencyRates.currencyCode)
